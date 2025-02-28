@@ -69,6 +69,8 @@ SWIFT_BUILD_TEST_HOOK?=
 # maintenance of the 'Reference' target and test-plugin.
 PROTOS_DIRS=Conformance protoc-gen-swiftTests SwiftProtobuf SwiftProtobufPluginLibrary SwiftProtobufPluginLibraryTests SwiftProtobufTests
 
+VAMA_PATH := ~/Projects/vama/VRPCModels/generator-models
+
 .PHONY: \
 	all \
 	build \
@@ -108,7 +110,9 @@ all: build
 
 # Builds all the targets of the package.
 build:
-	${SWIFT} build ${SWIFT_BUILD_TEST_HOOK}
+	swift build -c release --product protoc-gen-swift
+	mv ./.build/release/protoc-gen-swift $(VAMA_PATH)
+	@echo "Success! Plugins are available in $(VAMA_PATH)"
 
 # Anything that needs the plugin should do a build.
 ${PROTOC_GEN_SWIFT}: build
