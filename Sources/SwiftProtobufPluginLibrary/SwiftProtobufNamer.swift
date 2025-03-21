@@ -349,7 +349,8 @@ public final class SwiftProtobufNamer {
 
         let result = NamingUtils.typePrefix(
             protoPackage: file.package,
-            fileOptions: file.options
+            fileOptions: file.options,
+            isBundledProto: SwiftProtobufInfo.isBundledProto(file: file)
         )
         filePrefixCache[file.name] = result
         return result
