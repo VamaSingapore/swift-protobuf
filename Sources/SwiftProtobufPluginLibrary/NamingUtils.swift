@@ -366,7 +366,7 @@ private enum CamelCaser {
 public enum NamingUtils {
 
     // Returns the type prefix to use for a given
-    static func typePrefix(protoPackage: String, fileOptions: Google_Protobuf_FileOptions) -> String {
+    static func typePrefix(protoPackage: String, fileOptions: Google_Protobuf_FileOptions, isBundledProto: Bool) -> String {
         // Explicit option (including blank), wins.
         if fileOptions.hasSwiftPrefix {
             return fileOptions.swiftPrefix
@@ -375,6 +375,8 @@ public enum NamingUtils {
         if protoPackage.isEmpty {
             return String()
         }
+
+        let shouldSeperateWithUnderscore = isBundledProto
 
         // NOTE: This code relies on the protoc validation of proto packages. Look
         // at Parser::ParsePackage() to see the logic, it comes down to reading
@@ -395,7 +397,9 @@ public enum NamingUtils {
                 makeUpper = true
             } else if c == "." {
                 makeUpper = true
-                prefix.append("_")
+                if shouldSeperateWithUnderscore {
+                    prefix.append("_")
+                }
             } else {
                 if prefix.isEmpty && c.isASCDigit {
                     // If the first character is going to be a digit, add an underscore
@@ -411,7 +415,7 @@ public enum NamingUtils {
             }
         }
         // End in an underscore to split off anything that gets added to it.
-        return String(prefix) + "_"
+        return String(prefix) + (shouldSeperateWithUnderscore ? "_" : "")
     }
 
     /// Helper a proto prefix from strings.  A proto prefix means underscores
