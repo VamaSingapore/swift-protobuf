@@ -96,10 +96,9 @@ class MessageFieldGenerator: FieldGeneratorBase, FieldGenerator {
 
         p.print()
         if usesHeapStorage {
-            p.print("\(comments)\(visibility)var \(swiftName): \(swiftType) {")
-            let defaultClause = hasFieldPresence ? " ?? \(swiftDefaultValue)" : ""
+            p.print("\(comments)\(visibility)var \(swiftName): \(swiftType)\(hasFieldPresence ? "?" : "") {")
             p.printIndented(
-                "get {return _storage.\(underscoreSwiftName)\(defaultClause)}",
+                "get {return _storage.\(underscoreSwiftName)}",
                 "set {_uniqueStorage().\(underscoreSwiftName) = newValue}"
             )
             p.print("}")
