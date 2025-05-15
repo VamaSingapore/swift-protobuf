@@ -174,6 +174,7 @@ public protocol Decoder {
     ///
     /// Unlike the primitive types, message fields are always stored
     /// as Swift `Optional` values.
+    mutating func decodeSingularMessageField<M: Message>(value: inout M) throws
     mutating func decodeSingularMessageField<M: Message>(value: inout M?) throws
     /// Decode message values to repeated field storage
     mutating func decodeRepeatedMessageField<M: Message>(value: inout [M]) throws
@@ -185,6 +186,7 @@ public protocol Decoder {
     /// Unlike the primitive types, message fields are always stored
     /// as Swift `Optional` values.
     /// Note that groups are only used in proto2.
+    mutating func decodeSingularGroupField<G: Message>(value: inout G) throws
     mutating func decodeSingularGroupField<G: Message>(value: inout G?) throws
     /// Decode group values to repeated field storage
     mutating func decodeRepeatedGroupField<G: Message>(value: inout [G]) throws

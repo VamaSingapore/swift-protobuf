@@ -554,6 +554,14 @@ internal struct JSONDecoder: Decoder {
         }
     }
 
+    mutating func decodeSingularMessageField<M: Message>(value: inout M) throws {
+        var optionalValue: M? = value
+        try decodeSingularMessageField(value: &optionalValue)
+        if let unwrappedValue = optionalValue {
+            value = unwrappedValue
+        }
+    }
+
     mutating func decodeSingularMessageField<M: Message>(value: inout M?) throws {
         if scanner.skipOptionalNull() {
             if M.self is any _CustomJSONCodable.Type {
@@ -610,6 +618,14 @@ internal struct JSONDecoder: Decoder {
                 return
             }
             try scanner.skipRequiredComma()
+        }
+    }
+
+    mutating func decodeSingularGroupField<G: Message>(value: inout G) throws {
+        var optionalValue: G? = value
+        try decodeSingularMessageField(value: &optionalValue)
+        if let unwrappedValue = optionalValue {
+            value = unwrappedValue
         }
     }
 
