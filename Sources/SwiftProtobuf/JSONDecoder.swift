@@ -621,14 +621,6 @@ internal struct JSONDecoder: Decoder {
         }
     }
 
-    mutating func decodeSingularGroupField<G: Message>(value: inout G) throws {
-        var optionalValue: G? = value
-        try decodeSingularMessageField(value: &optionalValue)
-        if let unwrappedValue = optionalValue {
-            value = unwrappedValue
-        }
-    }
-
     mutating func decodeSingularGroupField<G: Message>(value: inout G?) throws {
         try decodeSingularMessageField(value: &value)
     }
