@@ -389,14 +389,6 @@ struct PathDecoder<T: Message>: Decoder {
         try setRepeatedValue(&value)
     }
 
-    mutating func decodeSingularGroupField<G: Message>(value: inout G) throws {
-        var optionalValue: G? = value
-        try decodeSingularMessageField(value: &optionalValue)
-        if let unwrappedValue = optionalValue {
-            value = unwrappedValue
-        }
-    }
-
     mutating func decodeSingularGroupField<G>(
         value: inout G?
     ) throws where G: Message {

@@ -908,14 +908,6 @@ internal struct BinaryDecoder: Decoder {
         }
     }
 
-    internal mutating func decodeSingularGroupField<G: Message>(value: inout G) throws {
-        var optionalValue: G? = value
-        try decodeSingularMessageField(value: &optionalValue)
-        if let unwrappedValue = optionalValue {
-            value = unwrappedValue
-        }
-    }
-
     internal mutating func decodeSingularGroupField<G: Message>(value: inout G?) throws {
         var group = value ?? G()
         if try decodeFullGroup(group: &group, fieldNumber: fieldNumber) {

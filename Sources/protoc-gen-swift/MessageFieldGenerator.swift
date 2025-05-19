@@ -147,6 +147,7 @@ class MessageFieldGenerator: FieldGeneratorBase, FieldGenerator {
     }
 
     func generateDecodeFieldCase(printer p: inout CodePrinter) {
+        let isOptional = hasFieldPresence
         let decoderMethod: String
         let traitsArg: String
         if isMap {
@@ -158,7 +159,19 @@ class MessageFieldGenerator: FieldGeneratorBase, FieldGenerator {
             traitsArg = ""
         }
 
-        p.print("case \(number): try { try decoder.\(decoderMethod)(\(traitsArg)value: &\(storedProperty)) }()")
+        if !isOptional && !isRepeated {
+            p.print("case \(number): try {")
+            p.printIndented(
+                "var optionalValue: \(swiftStorageType)? = \(storedProperty)",
+                "try decoder.\(decoderMethod)(\(traitsArg)value: &optionalValue)",
+                "if let unwrappedValue = optionalValue {",
+                "    \(storedProperty) = unwrappedValue",
+                "}"
+            )
+            p.print("}()")
+        } else {
+            p.print("case \(number): try { try decoder.\(decoderMethod)(\(traitsArg)value: &\(storedProperty)) }()")
+        }
     }
 
     var generateTraverseUsesLocals: Bool {
