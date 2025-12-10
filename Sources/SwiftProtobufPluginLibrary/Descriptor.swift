@@ -1154,13 +1154,6 @@ public final class FieldDescriptor {
     public var hasPresence: Bool {
         // This logic comes from the C++ FieldDescriptor::has_presence() impl.
         guard !isRepeated else { return false }
-        switch type {
-        case .group, .message:
-            // Groups/messages always get field presence.
-            return true
-        default:
-            break
-        }
         return isExtension || oneofIndex != nil || features.fieldPresence != .implicit
     }
 

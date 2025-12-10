@@ -860,6 +860,14 @@ internal struct BinaryDecoder: Decoder {
         }
     }
 
+    internal mutating func decodeSingularMessageField<M: Message>(value: inout M) throws {
+        var optionalValue: M? = value
+        try decodeSingularMessageField(value: &optionalValue)
+        if let unwrappedValue = optionalValue {
+            value = unwrappedValue
+        }
+    }
+
     internal mutating func decodeSingularMessageField<M: Message>(value: inout M?) throws {
         guard fieldWireFormat == WireFormat.lengthDelimited else {
             return

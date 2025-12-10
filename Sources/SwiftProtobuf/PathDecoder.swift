@@ -369,6 +369,14 @@ struct PathDecoder<T: Message>: Decoder {
         try setRepeatedValue(&value)
     }
 
+    mutating func decodeSingularMessageField<M: Message>(value: inout M) throws {
+        var optionalValue: M? = value
+        try decodeSingularMessageField(value: &optionalValue)
+        if let unwrappedValue = optionalValue {
+            value = unwrappedValue
+        }
+    }
+
     mutating func decodeSingularMessageField<M>(
         value: inout M?
     ) throws where M: Message {
