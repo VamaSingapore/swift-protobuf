@@ -478,6 +478,14 @@ internal struct TextFormatDecoder: Decoder {
         }
     }
 
+    mutating func decodeSingularMessageField<M: Message>(value: inout M) throws {
+        var optionalValue: M? = value
+        try decodeSingularMessageField(value: &optionalValue)
+        if let unwrappedValue = optionalValue {
+            value = unwrappedValue
+        }
+    }
+
     mutating func decodeSingularMessageField<M: Message>(value: inout M?) throws {
         _ = scanner.skipOptionalColon()
         if value == nil {

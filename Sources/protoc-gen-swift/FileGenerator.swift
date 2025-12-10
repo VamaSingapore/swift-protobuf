@@ -228,6 +228,8 @@ class FileGenerator {
                 m.generateRuntimeSupport(printer: &p, file: self, parent: nil)
             }
         }
+
+        p.print("// swiftlint:enable all")
     }
 
     private func generateVersionCheck(printer p: inout CodePrinter) {
